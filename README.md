@@ -30,8 +30,8 @@ Open [http://localhost:3000](http://localhost:3000) to view the app.
 
 ## Datasets
 
-| Dataset | Source | License |
-|---------|--------|---------|
-| UCI Online Retail II | [UCI ML Repository](https://archive.ics.uci.edu/dataset/502/online+retail+ii) | CC BY 4.0 |
-| H&M Fashion | [Kaggle](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations) | Competition dataset |
-| Declining SaaS Product | Synthetic | — |
+| Dataset | Description |
+|---------|-------------|
+| E-commerce | Real-world online retail, healthy growth pattern |
+| Fashion Retail | Large-scale fashion retail, power-law engagement |
+| Declining SaaS | Synthetic declining product |

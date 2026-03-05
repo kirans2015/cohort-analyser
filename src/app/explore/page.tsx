@@ -24,7 +24,7 @@ const DATASETS = [
   {
     id: "hm-fashion",
     name: "Fashion Retail",
-    description: "Derived from the H&M Personalized Fashion Recommendations dataset (Kaggle). Shows classic power-law engagement — most buy once, a small core drives disproportionate value.",
+    description: "Large-scale fashion retail dataset with 1.36M users. Shows classic power-law engagement — most buy once, a small core drives disproportionate value.",
     archetype: "Power-Law",
     icon: BarChart3,
     color: "text-blue-400",

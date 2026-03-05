@@ -190,16 +190,8 @@ function LandingContent() {
       <footer className="border-t border-border mt-16 py-8">
         <div className="max-w-6xl mx-auto px-4 text-center text-sm text-muted-foreground">
           <p>
-            Concepts inspired by{" "}
-            <a href="https://pmcurve.com" className="underline hover:text-foreground transition-colors" target="_blank" rel="noopener noreferrer">pmcurve.com</a>
-            {" "}newsletter articles.
-          </p>
-          <p className="mt-2">
-            Built with Next.js, Nivo, and shadcn/ui. Case studies derived from sampled and aggregated public datasets:{" "}
-            <a href="https://archive.ics.uci.edu/dataset/502/online+retail+ii" className="underline hover:text-foreground transition-colors" target="_blank" rel="noopener noreferrer">UCI Online Retail II</a>
-            {" "}(CC BY 4.0) and{" "}
-            <a href="https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations" className="underline hover:text-foreground transition-colors" target="_blank" rel="noopener noreferrer">H&M via Kaggle</a>.
-            {" "}One dataset is synthetic. All data processed for educational purposes only.
+            Built with Next.js, Nivo, and shadcn/ui. Case studies derived from sampled and aggregated public datasets.
+            {" "}All data processed for educational purposes only.
           </p>
         </div>
       </footer>

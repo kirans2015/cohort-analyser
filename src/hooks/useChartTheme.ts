@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 
-export function useChartTheme() {
+/** Returns true if dark mode is active. Reacts to theme toggles. */
+export function useThemeMode(): boolean {
   const [isDark, setIsDark] = useState(true);
 
   useEffect(() => {
@@ -12,6 +13,12 @@ export function useChartTheme() {
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
     return () => observer.disconnect();
   }, []);
+
+  return isDark;
+}
+
+export function useChartTheme() {
+  const isDark = useThemeMode();
 
   if (isDark) {
     return {

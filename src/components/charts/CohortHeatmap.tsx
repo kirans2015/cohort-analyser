@@ -4,6 +4,7 @@ import { useMemo, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { RetentionTable, ChartAnnotation } from "@/engine/types";
 import { formatPercent } from "@/engine/utils";
+import { useThemeMode } from "@/hooks/useChartTheme";
 
 interface CohortHeatmapProps {
   table: RetentionTable;
@@ -22,28 +23,38 @@ interface CohortHeatmapProps {
 }
 
 // Color scale: 0% → deep red/gray, 100% → vibrant emerald
-function retentionColor(value: number, isRevenue = false): string {
-  if (value === 0) return "hsl(0 0% 12%)";
+function retentionColor(value: number, isDark: boolean, isRevenue = false): string {
+  if (value === 0) return isDark ? "hsl(0 0% 12%)" : "hsl(0 0% 92%)";
 
   if (isRevenue && value > 1) {
-    // Revenue retention > 100% → blue/purple tones (expansion)
     const intensity = Math.min((value - 1) / 0.5, 1);
     const h = 220 + intensity * 40;
-    const s = 70 + intensity * 20;
-    const l = 35 + intensity * 15;
+    const s = isDark ? 70 + intensity * 20 : 50 + intensity * 30;
+    const l = isDark ? 35 + intensity * 15 : 85 - intensity * 20;
     return `hsl(${h} ${s}% ${l}%)`;
   }
 
   const clamped = Math.max(0, Math.min(1, value));
-  // Interpolate from dark red/warm → emerald green
-  const h = clamped * 142; // 0 = red-ish, 142 = emerald
-  const s = 40 + clamped * 36; // 40% → 76%
-  const l = 15 + clamped * 25; // 15% → 40%
+  const h = clamped * 142;
+
+  if (isDark) {
+    const s = 40 + clamped * 36;
+    const l = 15 + clamped * 25;
+    return `hsl(${h} ${s}% ${l}%)`;
+  }
+
+  // Light mode: high lightness for low retention, deeper color for high retention
+  const s = 40 + clamped * 40;
+  const l = 92 - clamped * 42; // 92% → 50%
   return `hsl(${h} ${s}% ${l}%)`;
 }
 
-function textColor(value: number): string {
-  return value > 0.4 ? "hsl(0 0% 98%)" : "hsl(0 0% 75%)";
+function textColor(value: number, isDark: boolean): string {
+  if (isDark) {
+    return value > 0.4 ? "hsl(0 0% 98%)" : "hsl(0 0% 75%)";
+  }
+  // Light mode: dark text for readability
+  return value > 0.6 ? "hsl(0 0% 100%)" : "hsl(0 0% 15%)";
 }
 
 const CELL_WIDTH = 64;
@@ -63,6 +74,7 @@ export function CohortHeatmap({
   title,
 }: CohortHeatmapProps) {
   const [hoveredCell, setHoveredCell] = useState<{ row: number; col: number } | null>(null);
+  const isDark = useThemeMode();
 
   const displayData = useMemo(() => {
     const startIdx = Math.max(0, table.cohorts.length - maxCohorts);
@@ -191,14 +203,14 @@ export function CohortHeatmap({
                       width={CELL_WIDTH}
                       height={CELL_HEIGHT}
                       rx={4}
-                      fill={retentionColor(value, isRevenue)}
+                      fill={retentionColor(value, isDark, isRevenue)}
                       opacity={dimmed ? 0.3 : 1}
                       initial={animate ? { opacity: 0 } : false}
                       animate={{
                         opacity: dimmed ? 0.3 : 1,
                         strokeWidth: isHovered || highlighted ? 2 : 0,
                         stroke: isHovered
-                          ? "hsl(0 0% 98%)"
+                          ? isDark ? "hsl(0 0% 98%)" : "hsl(0 0% 20%)"
                           : highlighted
                             ? "hsl(217 91% 60%)"
                             : "transparent",
@@ -212,7 +224,7 @@ export function CohortHeatmap({
                       x={cellX + CELL_WIDTH / 2}
                       y={y + CELL_HEIGHT / 2 + 4}
                       textAnchor="middle"
-                      fill={textColor(value)}
+                      fill={textColor(value, isDark)}
                       fontSize={11}
                       fontWeight={col === 0 ? 600 : 400}
                       opacity={dimmed ? 0.3 : 1}
